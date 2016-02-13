@@ -80,7 +80,7 @@ install()
     fi
     
     echo "Downloading..."
-    curl -s -L ${LINK} | grep 'Emby.Mono.zip' | head -n 1 | sed -r 's/.{21}//' | sed -r 's/.{17}$//' | wget --base=http://github.com/ -i - -O ${FILE}
+    curl -s -L ${LINK} | grep 'Emby.Mono.zip' | head -n 1 | grep -Po '(?<=href=")[^"]+' | wget --base=http://github.com/ -i - -O ${FILE}
 
     echo "Extracting..."
     unzip -o ${FILE} -d ${INSTALL_DIR}
