@@ -167,7 +167,7 @@ mv_dbfolder()
                 chown -R ${RUN_AS}:${RUN_GRP} "${data_directory}"
 
             fi
-                xmlstarlet ed -L -u "${SERVICE_XPATH}/old_db-folder" -v "" -n ${OMV_CONFIG_FILE}
+            xmlstarlet ed -L -u "${SERVICE_XPATH}/old_db-folder" -v "" -n ${OMV_CONFIG_FILE}
         fi
     fi   
 }
