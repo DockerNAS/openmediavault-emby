@@ -41,8 +41,7 @@ if [ "$(omv_config_get "${SERVICE_XPATH}/enable")" != "1" ]; then
     update-rc.d ${SERVICE} disable || :
 fi
 
-install()
-{
+install() {
     if omv_config_exists "${SERVICE_XPATH}"; then
         data_directory="$(omv_config_get "${SERVICE_XPATH}/db-folder")"
         xmlstarlet ed -L -u "${SERVICE_XPATH}/old_db-folder" -v "" -n ${OMV_CONFIG_FILE}
@@ -139,8 +138,7 @@ EOF
     echo "...ok"
 }
 
-mv_dbfolder()
-{
+mv_dbfolder() {
     if omv_config_exists "${SERVICE_XPATH}/old_db-folder"; then
         current_data_directory="$(omv_config_get "${SERVICE_XPATH}/old_db-folder")"
 
