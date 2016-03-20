@@ -212,7 +212,7 @@ Ext.define("OMV.module.admin.service.emby.Settings", {
                           'Ports to be forwarded from your router to your OMV for remote client connections or secure browser sessions, via HTTPS, to manage the server.' +
                           '<ul>' +
                           '<li>' +
-                          '<b>TCP 8096</b> To connect with Plex Connect or direct client connections.' +
+                          '<b>TCP 8096</b> To connect with Emby Connect or direct client connections.' +
                           '</li>' +
                           '<li>' +
                           '<b>TCP 8920</b> Secure connection to Manage Server.' +
