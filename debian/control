@@ -8,8 +8,8 @@ Standards-Version: 3.9.3
 
 Package: openmediavault-emby
 Architecture: all
-Depends: openmediavault (>= 1.0.21),
-         ${misc:Depends},
+Depends: ${misc:Depends},
+         openmediavault (>= 1.0.21),
          libmono-cil-dev (>= 3.10),
          cli-common-dev (>= 0.7),
          libsqlite3-dev (>= 3.7.2),
