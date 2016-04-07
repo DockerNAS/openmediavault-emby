@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright (C) 2014-2015 OpenMediaVault Plugin Developers
+ * Copyright (C) 2014-2016 OpenMediaVault Plugin Developers
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 
 require_once "openmediavault/config.inc";
 require_once "openmediavault/error.inc";
-require_once "openmediavault/initscript.inc";
+require_once "openmediavault/systemctl.inc";
 require_once "openmediavault/module.inc";
 require_once "openmediavault/util.inc";
 
@@ -55,7 +55,7 @@ class OMVModuleEmby extends OMVModuleServiceAbstract implements
             throw new OMVException(
                 OMVErrorMsg::E_EXEC_FAILED,
                 $cmd,
-                implode("\n", $output)
+                implode(PHP_EOL, $output)
             );
         }
     }
@@ -77,14 +77,14 @@ class OMVModuleEmby extends OMVModuleServiceAbstract implements
             return;
         }
 
-        $initd = new OMVSysVInitScript($this->getPluginName(), true);
-        $initd->exec();
+        $systemCtl = new OMVSystemCtl($this->getPluginName(), true);
+        $systemCtl->enable(true);
     }
 
     public function stopService()
     {
-        $initd = new OMVSysVInitScript($this->getPluginName());
-        $initd->exec();
+        $systemCtl = new OMVSystemCtl($this->getPluginName());
+        $systemCtl->disable(true);
     }
 
     public function getStatus()
@@ -100,20 +100,20 @@ class OMVModuleEmby extends OMVModuleServiceAbstract implements
             );
         }
 
-        $initd = new OMVSysVInitScript($this->getPluginName());
+        $systemCtl = new OMVSystemCtl($this->getPluginName());
 
-        return array(
+        return [
             "name" => $this->getPluginName(),
             "title" => gettext("Emby"),
             "enabled" => boolval($object["enable"]),
-            "running" => $initd->status() == 0
-        );
+            "running" => $systemCtl->isActive()
+        ];
     }
 
     public function bindListeners(OMVNotifyDispatcher $dispatcher)
     {
         $dispatcher->addListener(
-            OMV_NOTIFY_CREATE | OMV_NOTIFY_MODIFY | OMV_NOTIFY_DELETE,
+            OMV_NOTIFY_MODIFY,
             $this->getEventMessagePath(),
             array($this, "setDirty")
         );
