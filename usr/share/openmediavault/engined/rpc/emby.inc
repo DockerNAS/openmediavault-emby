@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2015 OpenMediaVault Plugin Developers
+ * Copyright (C) 2014-2016 OpenMediaVault Plugin Developers
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ require_once("openmediavault/notify.inc");
 require_once("openmediavault/object.inc");
 require_once("openmediavault/util.inc");
 require_once("openmediavault/rpcservice.inc");
-require_once("openmediavault/initscript.inc");
+require_once("openmediavault/systemctl.inc");
 
 class OMVRpcServiceEmby extends OMVRpcServiceAbstract
 {
@@ -58,9 +58,10 @@ class OMVRpcServiceEmby extends OMVRpcServiceAbstract
         global $xmlConfig;
 
         // Validate the RPC caller context.
-        $this->validateMethodContext($context, array(
-            "role" => OMV_ROLE_ADMINISTRATOR
-        ));
+        $this->validateMethodContext(
+            $context, 
+            [ "role" => OMV_ROLE_ADMINISTRATOR ]
+        );
 
         // Get configuration object
         $object = $xmlConfig->get($this->getXpath());
@@ -73,22 +74,22 @@ class OMVRpcServiceEmby extends OMVRpcServiceAbstract
         }
 
         // Modify result data
-        $settingsObject["enable"] = boolval($object["enable"]);
-        $settingsObject["showtab"] = boolval($object["showtab"]);
-        $settingsObject["mntentref"] = $object["mntentref"];
-        $settingsObject["db-folder"] = $object["db-folder"];
+        $object["enable"] = boolval($object["enable"]);
+        $object["showtab"] = boolval($object["showtab"]);
+        $object["mntentref"] = $object["mntentref"];
+        $object["db-folder"] = $object["db-folder"];
 
-        return $settingsObject;
+        return $object;
     }
     
     public function setSettings($params, $context)
     {
         global $xmlConfig;
-
         // Validate the RPC caller context.
-        $this->validateMethodContext($context, array(
-            "role" => OMV_ROLE_ADMINISTRATOR
-        ));
+        $this->validateMethodContext(
+            $context,
+            [ "role" => OMV_ROLE_ADMINISTRATOR ]
+        );
 
         // Validate the parameters of the RPC service method.
         $this->validateMethodParams(
@@ -126,13 +127,13 @@ class OMVRpcServiceEmby extends OMVRpcServiceAbstract
         }
 
         // Prepare configuration data
-        $object = array(
+        $object = [
             "enable"    => array_boolval($params, "enable"),
             "showtab"   => array_boolval($params, "showtab"),
             "mntentref" => $params['mntentref'],
             "db-folder" => $params['db-folder'],
             "old_db-folder" => $old_folder
-        );
+        ];
 
         // Set configuration object
         if (false === $xmlConfig->replace($this->getXpath(), $object)) {
@@ -160,7 +161,7 @@ class OMVRpcServiceEmby extends OMVRpcServiceAbstract
         // Validate the RPC caller context.
         $this->validateMethodContext(
             $context,
-            array( "role" => OMV_ROLE_ADMINISTRATOR )
+            [ "role" => OMV_ROLE_ADMINISTRATOR ]
         );
 
         $object = $xmlConfig->get($this->getXPath());
@@ -178,8 +179,8 @@ class OMVRpcServiceEmby extends OMVRpcServiceAbstract
             return;
         }
 
-        $initd = new OMVSysVInitScript($this->getPluginName());
-        $initd->invoke("restart");
+        $systemCtl = new OMVSystemCtl($this->getPluginName());
+        $systemCtl->invoke("restart");
     }
 
     public function doUpdate($params, $context)
@@ -187,7 +188,7 @@ class OMVRpcServiceEmby extends OMVRpcServiceAbstract
 	// Validate the RPC caller context.
 	$this->validateMethodContext(
 		$context,
-		array( "role" => OMV_ROLE_ADMINISTRATOR )
+		["role" => OMV_ROLE_ADMINISTRATOR ]
 	);
 
 	// Create a background process.
