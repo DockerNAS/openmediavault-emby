@@ -3,19 +3,18 @@ Section: net
 XB-Plugin-Section: multimedia
 Priority: optional
 Maintainer: OpenMediaVault Plugin Developers <plugins@omv-extras.org>
-Build-Depends: debhelper (>= 9.0.0 )
-Standards-Version: 3.9.3
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.6
 
 Package: openmediavault-emby
 Architecture: all
 Depends: ${misc:Depends},
-         openmediavault (>= 1.0.21),
-         libmono-cil-dev (>= 3.10),
-         cli-common-dev (>= 0.7),
-         libsqlite3-dev (>= 3.7.2),
-         libgdiplus (>= 3.8),
-         libtiff4,
-         libxext6,
+         openmediavault (>= 3.15),
+         libmono-cil-dev (>= 4.2),
+         cli-common-dev (>= 0.9),
+         libsqlite3-dev (>= 3.8),
+         libgdiplus (>= 3.12),
+         imagemagick,
          unzip,
          curl,
          sudo
