@@ -24,8 +24,8 @@ case "$1" in
         fi
 
         echo "Removing old pid file if present..."
-        if [ -e /var/run/emby/emby.pid ]; then
-            rm -Rf /var/run/emby/emby.pid
+        if [ -e /var/run/emby.pid ]; then
+            rm -Rf /var/run/emby.pid
             echo "...ok"
         fi
 
@@ -89,7 +89,7 @@ if [ "$(omv_config_get "${SERVICE_XPATH}/enable")" != "1" ]; then
             sleep 2;
     done
     sleep 5
-    invoke-rc.d ${SERVICE_XPATH_NAME} stop
+    systemctl stop ${SERVICE_XPATH_NAME}
 fi
 
 exit 0
