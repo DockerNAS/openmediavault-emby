@@ -1,15 +1,18 @@
 #! /bin/sh
-
+#
 ### BEGIN INIT INFO
+# Provides:          emby
+# Description:       Emby Media Server
+# Short-Description: Init script for Emby Media Server
 # Provides:          emby
 # Required-Start:    $local_fs $network $remote_fs
 # Required-Stop:     $local_fs $network $remote_fs
-# Should-Start:      $NetworkManager
-# Should-Stop:       $NetworkManager
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: starts instance of Emby
-# Description:       starts instance of Emby using start-stop-daemon
+# Short-Description: Emby Media Server
+# Description:       Init script for starting and
+#         stopping Emby Media Server using the 
+#         start-stop-daemon.
 ### END INIT INFO
 
 set -e
@@ -18,8 +21,7 @@ SERVICE="emby"
 RUN_AS="emby"
 RUN_GRP="nogroup"
 APP_PATH="/opt/${SERVICE}"
-PIDDIR="/var/run/${SERVICE}"
-PID_FILE="/var/run/${SERVICE}/${SERVICE}.pid"
+PID_FILE="/var/run/${SERVICE}.pid"
 DAEMON="/usr/bin/mono -- MediaBrowser.Server.Mono.exe"
 
 SERVICE_XPATH="//services/${SERVICE}"
@@ -50,12 +52,6 @@ start() {
 		DBFOLDER="/var/lib/${SERVICE}"
 	fi
 
-       if [ ! -d $PIDDIR ]; then
-         mkdir -p $PIDDIR
-         chown $RUN_AS:$RUN_GRP $PIDDIR
-         chmod 2775 $PIDDIR
-       fi
-
 	DAEMON_OPTS=" -programdata ${DBFOLDER} -restartpath /usr/sbin/${SERVICE}.sh"
 
 #	 start-stop-daemon --start --user root --chuid root --background -m --oknodo --pidfile /var/run/mediabrowser/mediabrowser.pid --chdir /opt/mediabrowser --exec /opt/mono/bin/mono -- MediaBrowser.Server.Mono.exe -programdata /var/lib/mediabrowser
@@ -71,7 +67,7 @@ stop() {
 #        start-stop-daemon --stop --pidfile /var/run/mediabrowser/mediabrowser.pid --retry 15 
 	start-stop-daemon --stop -p $PID_FILE --retry 15
 
-    rm -rf $PIDDIR
+    rm -rf $PID_FILE
   fi
 }
 
@@ -101,4 +97,5 @@ case "$1" in
     ;;
   *)
     echo "Usage: $0 {start|stop|restart|status}"
+
 esac
