@@ -29,22 +29,18 @@ FFMPEG_LINK="/usr/local/bin/ffmpeg"
 LINK="https://github.com//MediaBrowser/Emby/releases/latest"
 FILE="/tmp/Emby.Mono.zip"
 INSTALL_DIR="/opt/${SERVICE}"
-LIBS_AMD64="https://github.com/tekkbebe/OMV.Resources/raw/master/libs/embylibsamd64/embylibs.zip"
-LIBS_I386="https://github.com/tekkbebe/OMV.Resources/raw/master/libs/embylibsi386/embylibs.zip"
-LIBS_ARMHF="https://github.com/tekkbebe/OMV.Resources/raw/master/libs/embylibsarmhf/embylibs.zip"
-LIBS_FILE="/tmp/embylibs.zip"
-LIBS_DIR="/opt/${SERVICE}/embylibs"
 IMAGEMAGICK_CONF="/opt/${SERVICE}/ImageMagickSharp.dll.config"
 SQLITE3_CONF="/opt/${SERVICE}/System.Data.SQLite.dll.config"
 
 if [ "$(omv_config_get "${SERVICE_XPATH}/enable")" != "1" ]; then
-    update-rc.d ${SERVICE} disable || :
+    systemctl disable ${SERVICE} || :
 fi
 
-install() {
+install()
+{
     if omv_config_exists "${SERVICE_XPATH}"; then
         data_directory="$(omv_config_get "${SERVICE_XPATH}/db-folder")"
-        xmlstarlet ed -L -u "${SERVICE_XPATH}/old_db-folder" -v "" -n ${OMV_CONFIG_FILE}
+        xmlstarlet ed -L -u "${SERVICE_XPATH}/old_db-folder" -v "" ${OMV_CONFIG_FILE}
     fi
     
     if [ "${data_directory}" = "" ]; then
@@ -85,39 +81,10 @@ install() {
     unzip -o ${FILE} -d ${INSTALL_DIR}
     rm -f ${FILE}
 
-    if [ -f "${LIBS_FILE}" ]; then
-        rm -f ${LIBS_FILE}
-    fi
-
-    if arch | grep x86_64 >/dev/null 2>&1; then
-        LIBS_LINK="${LIBS_AMD64}"
-        echo "cpu 64 bit..."
-    elif arch | grep 86 >/dev/null 2>&1; then
-        LIBS_LINK="${LIBS_I386}"
-        echo "cpu 32 bit..."
-    elif arch | grep armv7l >/dev/null 2>&1; then
-        LIBS_LINK="${LIBS_ARMHF}"
-        echo "cpu armhf..."
-    else
-        echo "cpu architecture not supported.  exiting..."
-        exit 0
-    fi
-
-    if [ -f "${LIBS_FILE}" ]; then
-        rm -f ${FILE}
-    fi
-
-    echo "Downloading..."
-    wget ${LIBS_LINK} -O ${LIBS_FILE}
-
-    echo "Extracting..."
-    unzip -o ${LIBS_FILE} -d ${LIBS_DIR}
-    rm -f ${LIBS_FILE}
-
     echo "Creating imagemagick config..."
     cat <<EOF > "${IMAGEMAGICK_CONF}"
 <configuration>
-  <dllmap dll="CORE_RL_Wand_.dll" target="libMagickWand-6.Q8.so.2" os="linux"/>
+  <dllmap dll="CORE_RL_Wand_.dll" target="libMagickWand-6.Q16.so.2" os="linux"/>
 </configuration>  
 EOF
 
@@ -129,18 +96,17 @@ EOF
 EOF
 
     chown -R ${RUN_AS}:${RUN_GRP} ${INSTALL_DIR}
-    chmod 755 ${INSTALL_DIR}/embylibs/*
     chmod 755 ${INSTALL_DIR}/MediaBrowser.Server.Mono.exe
-    ldconfig
 
-    echo "Calling insserv..."
-    insserv ${SERVICE}
+    echo "Starting Emby..."
+    systemctl enable ${SERVICE}
     echo "...ok"
 }
 
-mv_dbfolder() {
+mv_dbfolder()
+{
     if omv_config_exists "${SERVICE_XPATH}/old_db-folder"; then
-        current_data_directory="$(omv_config_get "${SERVICE_XPATH}/old_db-folder")"
+            current_data_directory="$(omv_config_get "${SERVICE_XPATH}/old_db-folder")"
 
         if [ "${current_data_directory}" != "" ]; then
             if [ -d "${current_data_directory}" ]; then
@@ -165,9 +131,9 @@ mv_dbfolder() {
                 chown -R ${RUN_AS}:${RUN_GRP} "${data_directory}"
 
             fi
-            xmlstarlet ed -L -u "${SERVICE_XPATH}/old_db-folder" -v "" -n ${OMV_CONFIG_FILE}
+            xmlstarlet ed -L -u "${SERVICE_XPATH}/old_db-folder" -v "" ${OMV_CONFIG_FILE}
         fi
-    fi   
+    fi
 }
 
 case $2 in
@@ -178,7 +144,7 @@ case $2 in
 
     update)
         echo "Updating Emby..."
-        update-rc.d ${SERVICE} stop
+        systemctl disable ${SERVICE}
         install
     ;;
 
@@ -191,9 +157,4 @@ case $2 in
     ;;
 esac
 
-if [ "$(omv_config_get "${SERVICE_XPATH}/enable")" != "0" ]; then
-    invoke-rc.d ${SERVICE} start
-fi
-
 exit 0
-
