@@ -1,8 +1,8 @@
 Format: http://dep.debian.net/deps/dep5
 Upstream-Name: openmediavault-emby
 
-Copyright: 2014-2015 Sergio Rius Rodríguez <sergio.rius@hotmail.com>
-Copyright: 2014-2015 OpenMediaVault Plugin Developers <plugins@omv-extras.org>
+Copyright: 2014-2016 Sergio Rius Rodríguez <sergio.rius@hotmail.com>
+Copyright: 2014-2016 OpenMediaVault Plugin Developers <plugins@omv-extras.org>
 License: GPL-3+
 
 Files: var/www/openmediavault/images/emby.png
