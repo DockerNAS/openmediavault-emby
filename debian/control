@@ -9,7 +9,7 @@ Standards-Version: 3.9.6
 Package: openmediavault-emby
 Architecture: all
 Depends: ${misc:Depends},
-         openmediavault (>= 3.13),
+         openmediavault (>= 3.0.13),
          libmono-cil-dev (>= 4.2),
          cli-common-dev (>= 0.9),
          libsqlite3-dev (>= 3.8),
