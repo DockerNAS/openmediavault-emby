@@ -12,18 +12,18 @@ case "$1" in
         DATADIR="$(omv_config_get "${SERVICE_XPATH}/db-folder")"
         FFMPEG_LINK="/usr/local/bin/ffmpeg"
 
-        if [ -f "/var/run/${SERVICE_XPATH_NAME}/${SERVICE_XPATH_NAME}.pid" ]; then
-            PID=`cat /var/run/${SERVICE_XPATH_NAME}/${SERVICE_XPATH_NAME}.pid`;
+        if [ -f "/var/run/${SERVICE_XPATH_NAME}.pid" ]; then
+            PID=`cat /var/run/${SERVICE_XPATH_NAME}.pid`;
             if ! kill -0 $PID > /dev/null 2>&1; then
                 echo "Removing stale pid file"
-                rm /var/run/${SERVICE_XPATH_NAME}/${SERVICE_XPATH_NAME}.pid
+                rm /var/run/${SERVICE_XPATH_NAME}.pid
             else
                 kill -9 $PID;
             fi
         fi
 
         if [ -e "${FFMPEG_LINK}" ]; then
-            rm -Rf "${FFMPEG_LINK}"
+            rm -rf "${FFMPEG_LINK}"
         fi
 
         if [ -d "/opt/${SERVICE_XPATH_NAME}" ]; then
