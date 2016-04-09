@@ -1,4 +1,4 @@
 usr/share/openmediavault/*  usr/share/openmediavault
 var/www/openmediavault/*  var/www/openmediavault
-etc/*  /etc
-usr/sbin/* /usr/sbin
+etc/sudoers.d/*  etc/sudoers.d
+usr/sbin/* usr/sbin
