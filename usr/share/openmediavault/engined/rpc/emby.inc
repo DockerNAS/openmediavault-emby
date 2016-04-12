@@ -179,7 +179,7 @@ class OMVRpcServiceEmby extends OMVRpcServiceAbstract
             return;
         }
 
-        $systemCtl = new OMVSystemCtl($this->getPluginName(), true);
+        $systemCtl = new OMVSystemCtl($this->getPluginName());
         $systemCtl->restart(true);
     }
 
