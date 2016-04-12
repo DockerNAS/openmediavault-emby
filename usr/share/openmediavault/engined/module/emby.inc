@@ -77,7 +77,7 @@ class OMVModuleEmby extends OMVModuleServiceAbstract implements
             return;
         }
 
-        $systemCtl = new OMVSystemCtl($this->getPluginName(), true);
+        $systemCtl = new OMVSystemCtl($this->getPluginName());
         $systemCtl->enable(true);
     }
 
