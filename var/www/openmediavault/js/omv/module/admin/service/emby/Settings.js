@@ -192,7 +192,7 @@ Ext.define("OMV.module.admin.service.emby.Settings", {
                           '<b>** Warning **</b> <b>Do not</b> use the <b>Shutdown button</b> in the Manage Server section.  You can use any of the Restart buttons in the Emby UI.' +
                           '</li>' +
                           '<li>' +
-                          '<b>** Warning **</b> Allowing Emby to write metadata to your media folders may not be desired.  To enable this feature run the following command: <b>usermod -a -G users emby</b>' +
+                          '<b>** Warning **</b> Allowing Emby to write metadata to your media folders may not be desired.  To enable this feature follow the instructions <a href="http://forums.openmediavault.org/index.php/Thread/13548-Emby-enable-writing-metadata-to-media-folders" target="_blank">here</a>.' +
                           '</li>' +
                           '</ol>' +
                           '<h3>OMV Firewall</h3>' +
