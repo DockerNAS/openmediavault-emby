@@ -1,3 +1,3 @@
 #! /bin/sh
 
-sudo /etc/init.d/emby restart || :
+sudo /bin/systemctl restart emby || :
