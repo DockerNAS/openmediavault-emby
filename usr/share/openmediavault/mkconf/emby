@@ -117,9 +117,7 @@ mv_dbfolder()
                     cp -rfp ${current_data_directory}/ffmpeg ${FFMPEG_LINK}
                     rm -rf ${current_data_directory}/ffmpeg
                     ln -s ${FFMPEG_LINK} ${current_data_directory}/ffmpeg
-                    chmod 755 ${FFMPEG_LINK}/*/ffmpeg
-                    chmod 755 ${FFMPEG_LINK}/*/ffprobe
-                    chmod 755 ${FFMPEG_LINK}/*/fonts/ARIALUNI.TTF
+                    find ${FFMPEG_LINK}/* -type f -exec chmod 755 {} \;
                 fi
                     
                 if [ ! -d "${data_directory}/cache" ]; then
