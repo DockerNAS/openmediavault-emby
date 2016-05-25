@@ -1,3 +1,9 @@
+openmediavault-emby (2.7) stable; urgency=low
+
+  * Adustments for removal of ffmpeg fonts folder. 
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Wed, 25 May 2016 11:40:10 -0400
+
 openmediavault-emby (2.6) stable; urgency=low
 
   * Update mkconf link for Emby.Mono.zip
