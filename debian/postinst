@@ -79,7 +79,7 @@ if [ "$(omv_config_get "${SERVICE_XPATH}/enable")" != "1" ]; then
     i=0
     while [ "$i" -le "90" ]
         do
-            if [ -f /var/lib/${SERVICE_XPATH_NAME}/ffmpeg/*/fonts/fonts.conf ]; then
+            if [ -f /var/lib/${SERVICE_XPATH_NAME}/ffmpeg/*/ffprobe ]; then
                 break
             else
                 echo "$i";
