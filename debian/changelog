@@ -1,3 +1,9 @@
+openmediavault-emby (3.3) stable; urgency=low
+
+  * Adjustments for removal of ffmpeg fonts folder.
+
+ -- OpenMediaVault Plugin Developers <plugins@omv-extras.org>  Wed, 25 May 2016 11:47:01 -0400
+
 openmediavault-emby (3.2) stable; urgency=low
 
   * Changed dependency of OMV Package to = 3.0.13 to avoid accidental
