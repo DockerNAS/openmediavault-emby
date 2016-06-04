@@ -5,12 +5,12 @@
 		"type": "object",
 		"properties": {
 		    "enable": {
-				"type": "boolean",
-				"required": true
+			    "type": "boolean",
+			    "required": true
 			},
 			"showtab": {
-			 	"type": "boolean",
-		 		"required": true
+			    "type": "boolean",
+		 	    "required": true
 			},
 			"mntentref": {
 			    "type": "string",
