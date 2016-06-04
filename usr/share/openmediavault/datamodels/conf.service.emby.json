@@ -1,1 +1,27 @@
-1
+
+{
+	"type": "config",
+	"id": "conf.service.emby",
+	"title": "Emby",
+	"queryinfo": {
+		"xpath": "//services/emby",
+		"iterable": false
+	},
+	"properties": {
+		"enable": {
+			"type": "boolean",
+			"default": false
+		},
+		"showtab":{
+			"type": "boolean",
+			"default": false
+		},
+		"mntentref": {
+			"type": "string",
+			"format": "uuidv4"
+		},
+		"db-folder": {
+			"type": "string"
+		},
+	}
+}
