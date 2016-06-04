@@ -14,7 +14,7 @@
 		    },
 		    "mntentref": {
 		        "type": "string",
-		        "format": "uuidv4"
+		        "format": "uuidv4",
 		        "optional": true
 		    },
 		    "db-folder": {
