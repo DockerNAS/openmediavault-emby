@@ -1,4 +1,4 @@
-[{
+{
 	"type": "rpc",
 	"id": "rpc.emby.setsettings",
 	"params": {
@@ -23,4 +23,4 @@
 			}
 		}
 	}
-}]
+}
