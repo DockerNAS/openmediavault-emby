@@ -1,5 +1,5 @@
 [{
-    "type": "rpc",
+	"type": "rpc",
 	"id": "rpc.emby.setsettings",
 	"params": {
 		"type": "object",
