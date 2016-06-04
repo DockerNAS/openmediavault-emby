@@ -7,7 +7,7 @@
 		    "enable": {
 		        "type": "boolean",
 		        "required": true
-		    },
+		 	},
 			"showtab": {
 			    "type": "boolean",
 		        "required": true
