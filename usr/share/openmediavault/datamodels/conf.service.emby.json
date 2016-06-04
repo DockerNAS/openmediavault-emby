@@ -12,7 +12,7 @@
 			"type": "boolean",
 			"default": false
 		},
-		"showtab":{
+		"showtab": {
 			"type": "boolean",
 			"default": false
 		},
