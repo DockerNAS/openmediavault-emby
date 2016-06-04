@@ -4,23 +4,23 @@
 	"params": {
 		"type": "object",
 		"properties": {
-		    "enable": {
-			"type": "boolean",
-			"required": true
-		    },
-		    "showtab": {
-		        "type": "boolean",
-		         "required": true
-		    },
-		    "mntentref": {
-		        "type": "string",
-		        "format": "uuidv4",
-		        "optional": true
-		    },
-		    "db-folder": {
-		        "type": "string",
-		        "optional": true
-		    }
+			"enable": {
+				"type": "boolean",
+				"required": true
+			},
+			"showtab": {
+				"type": "boolean",
+				"required": true
+			},
+			"mntentref": {
+				"type": "string",
+				"format": "uuidv4",
+				"optional": true
+			},
+			"db-folder": {
+				"type": "string",
+				"optional": true
+			}
 		}
 	}
 }]
