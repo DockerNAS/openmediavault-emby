@@ -156,31 +156,14 @@ class OMVRpcServiceEmby extends OMVRpcServiceAbstract
 
     public function doRestart($params, $context)
     {
-        global $xmlConfig;
-
         // Validate the RPC caller context.
-        $this->validateMethodContext(
-            $context,
-            [ "role" => OMV_ROLE_ADMINISTRATOR ]
-        );
-
-        $object = $xmlConfig->get($this->getXPath());
-
-        if (is_null($object))
-        {
-            throw new OMVException(
-                OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
-                $this->getXPath()
-            );
-        }
-
-        if (!boolval($object["enable"]))
-        {
+        $this->validateMethodContext($context, ["role" => OMV_ROLE_ADMINISTRATOR]);
+        // Get the configuration object.
+        $db = \OMV\Config\Database::getInstance();
+        $object = $db->get("conf.service.emby");
+        if (TRUE !== $object->get("enable"))
             return;
-        }
-
-        $systemCtl = new OMVSystemCtl($this->getPluginName());
-        $systemCtl->restart(true);
+        exec("systemctl restart emby", $output);
     }
 
     public function doUpdate($params, $context)
