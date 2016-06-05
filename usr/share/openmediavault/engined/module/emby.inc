@@ -23,7 +23,7 @@ use OMV\Engine\Notify\Dispatcher;
 use OMV\Engine\Notify\IListener;
 use OMV\System\Process;
 use OMV\System\SystemCtl;
-class OpenVpn extends ServiceAbstract implements
+class Emby extends ServiceAbstract implements
     IListener,
     IServiceStatus
 {
