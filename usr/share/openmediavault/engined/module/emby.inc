@@ -1,7 +1,6 @@
 <?php
-
 /**
- * Copyright (C) 2014-2016 OpenMediaVault Plugin Developers
+ * Copyright (C) 2014-2016 OpenMediaVault Plugin Developers.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,111 +15,102 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-require_once "openmediavault/config.inc";
-require_once "openmediavault/error.inc";
-require_once "openmediavault/systemctl.inc";
-require_once "openmediavault/module.inc";
-require_once "openmediavault/util.inc";
-
-class OMVModuleEmby extends OMVModuleServiceAbstract implements
-    OMVIModuleServiceStatus,
-    OMVINotifyListener
+namespace OMV\Engined\Module;
+use OMV\Config\Database;
+use OMV\Engine\Module\IServiceStatus;
+use OMV\Engine\Module\ServiceAbstract;
+use OMV\Engine\Notify\Dispatcher;
+use OMV\Engine\Notify\IListener;
+use OMV\System\Process;
+use OMV\System\SystemCtl;
+class OpenVpn extends ServiceAbstract implements
+    IListener,
+    IServiceStatus
 {
+    /** @var Database */
+    private $database;
+    /** @var string */
+    private $dataModelPath = 'conf.service.emby';
+    /** @var string */
+    private $eventMessagePath = 'org.openmediavault.conf.service.emby';
+    /** @var string */
+    private $serviceName = 'openvpn.service';
+    public function __construct(Database $database = null)
+    {
+        $this->database = $database ?: Database::getInstance();
+    }
+    /**
+     * Get the module name.
+     *
+     * @return string
+     */
     public function getName()
     {
-        return "Emby";
+        return 'emby';
     }
-    
-    private function getPluginName()
-    {
-        return strtolower($this->getName());
-    }
-    
-    private function getXPath()
-    {
-        return sprintf("//services/%s", $this->getPluginName());
-    }
-    
-    private function getEventMessagePath()
-    {
-        return sprintf("org.openmediavault.services.%s", $this->getPluginName());
-    }
-
-    public function applyConfig()
-    {
-        $cmd = sprintf("omv-mkconf %s moveDbFolder 2>&1", $this->getPluginName());
-
-        if (0 !== $this->exec($cmd, $output)) {
-            throw new OMVException(
-                OMVErrorMsg::E_EXEC_FAILED,
-                $cmd,
-                implode(PHP_EOL, $output)
-            );
-        }
-    }
-
-    public function startService()
-    {
-        global $xmlConfig;
-
-        $object = $xmlConfig->get($this->getXpath());
-
-        if (is_null($object)) {
-            throw new OMVException(
-                OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
-                $this->getXpath()
-            );
-        }
-
-        if (!$object["enable"]) {
-            return;
-        }
-
-        $systemCtl = new OMVSystemCtl($this->getPluginName());
-        $systemCtl->enable(true);
-    }
-
-    public function stopService()
-    {
-        $systemCtl = new OMVSystemCtl($this->getPluginName());
-        $systemCtl->disable(true);
-    }
-
+    /**
+     * Get the module status.
+     *
+     * @return array
+     */
     public function getStatus()
     {
-        global $xmlConfig;
-
-        $object = $xmlConfig->get($this->getXpath());
-
-        if (is_null($object)) {
-            throw new OMVException(
-                OMVErrorMsg::E_CONFIG_GET_OBJECT_FAILED,
-                $this->getXpath()
-            );
-        }
-
-        $systemCtl = new OMVSystemCtl($this->getPluginName());
-
+        $object = $this->database->get($this->dataModelPath);
+        $systemCtl = new SystemCtl($this->serviceName);
         return [
-            "name" => $this->getPluginName(),
-            "title" => gettext("Emby"),
-            "enabled" => boolval($object["enable"]),
-            "running" => $systemCtl->isActive()
+            'name' => $this->getName(),
+            'title' => gettext('Emby'),
+            'enabled' => $object->get('enable'),
+            'running' => $systemCtl->isActive(),
         ];
     }
-
-    public function bindListeners(OMVNotifyDispatcher $dispatcher)
+    /**
+     * Generate the configuration.
+     *
+     * @return void
+     */
+    public function applyConfig()
+    {
+        $cmd = new Process('omv-mkconf', $this->getName(), 'moveDbFolder');
+        $cmd->setRedirect2to1();
+        $cmd->execute();
+    }
+    /**
+     * Start the managed service.
+     *
+     * @return void
+     */
+    public function startService()
+    {
+        $object = $this->database->get($this->dataModelPath);
+        if ($object->get('enable')) {
+            $systemCtl = new SystemCtl($this->serviceName);
+            $systemCtl->enable(true);
+        }
+    }
+    /**
+     * Stop the managed service.
+     *
+     * @return void
+     */
+    public function stopService()
+    {
+        $systemCtl = new SystemCtl($this->serviceName);
+        $systemCtl->disable(true);
+    }
+    /**
+     * Bind listeners.
+     *
+     * @param Dispatcher $dispatcher The dispatcher object.
+     *
+     * @return void
+     */
+    public function bindListeners(Dispatcher $dispatcher)
     {
         $dispatcher->addListener(
-            OMV_NOTIFY_MODIFY,
-            $this->getEventMessagePath(),
-            array($this, "setDirty")
+            OMV_NOTIFY_CREATE | OMV_NOTIFY_MODIFY | OMV_NOTIFY_DELETE,
+            $this->eventMessagePath,
+            [$this, 'setDirty']
         );
     }
-
 }
-
-// Register module
-$moduleMgr = &OMVModuleMgr::getInstance();
-$moduleMgr->registerModule(new OMVModuleEmby());
