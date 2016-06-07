@@ -34,7 +34,7 @@ class Emby extends ServiceAbstract implements
     /** @var string */
     private $eventMessagePath = 'org.openmediavault.conf.service.emby';
     /** @var string */
-    private $serviceName = 'openvpn.service';
+    private $serviceName = 'emby.service';
     public function __construct(Database $database = null)
     {
         $this->database = $database ?: Database::getInstance();
